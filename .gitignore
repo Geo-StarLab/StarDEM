@@ -11,6 +11,7 @@
 *.ilk
 *.map
 *.exp
+*.csv
 
 # Precompiled Headers
 *.gch
@@ -50,3 +51,4 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+__pycache__
