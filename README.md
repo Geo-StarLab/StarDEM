@@ -2,7 +2,7 @@
 
 An open sourced Discrete Element Method (DEM) software based on Python. 
 
-This is a very simple DEM code for DEM beginners. 
+This is a very simple DEM code for beginners who are interested in DEM coding. 
 
 Due to the low efficiency of Python, it is hard to apply this software to large scale problems which usually involves tons of particles.
 
