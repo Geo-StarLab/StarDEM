@@ -17,7 +17,19 @@ Run the "Run_PyDEM.py" file
 
 You will get a results in ResultsOutput file
 
-Use Paraview to check the results
+Use Paraview to check the results as the following steps.
+
+* Open the results.csv file. -> Apply.
+* Add the Table To Points filter.
+    + Set the X Column, Y Column, and Z Column to the respective columns.
+    + Apply.
+    + Close the SpreadSheetView. 
+* Add the Glyph filter.
+    + Change Glyph Type to Sphere.
+    + Change Scale Array to the name of the column containing the radius.
+    + Change the Scale Factor to 2. (The spheres are scaled from a reference with radius 0.5.)
+    + Change Glyph Mode to All Points.
+    + Apply.
 
 ## Contract
 Email: cshang.cimne.upc.edu

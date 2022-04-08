@@ -37,14 +37,13 @@ class PostProcess():
 
         self.my2dData = my2dData
 
-        os.remove('./ResultsOutput/test.csv')
+        self.outName = './ResultsOutput/results.csv'
 
-        self.outName = './ResultsOutput/test.csv'
+        # clean the exsisted file first
+        if os.path.isfile(self.outName):
+            os.remove(self.outName)
         
         with open(self.outName,'a') as f:
-            # clean the file first
-            #f.seek(0)
-            #f.truncate()
             # write the particle information
             f.write("\"x\", \"y\", \"z\", \"r scale\" \n")
             for p_pram_dict in self.my2dData.p_pram_list:
