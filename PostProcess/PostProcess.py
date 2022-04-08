@@ -3,6 +3,7 @@
 # ---------------Date: 04-01-2022---------------
 # ---------------License : BSD license----------
 
+import os
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
@@ -35,10 +36,17 @@ class PostProcess():
     def WriteOutParaview(self, my2dData):
 
         self.my2dData = my2dData
-        
+
+        os.remove('./ResultsOutput/test.csv')
+
         self.outName = './ResultsOutput/test.csv'
+        
         with open(self.outName,'a') as f:
-            f.write("x coord, y coord, z coord, scalar \n")
+            # clean the file first
+            #f.seek(0)
+            #f.truncate()
+            # write the particle information
+            f.write("\"x\", \"y\", \"z\", \"r scale\" \n")
             for p_pram_dict in self.my2dData.p_pram_list:
                 f.write(str(p_pram_dict["p_x"]) + ', ' + str(p_pram_dict["p_y"]) + ', 0, ' + str(p_pram_dict["radius"]) + '\n')
             f.close()

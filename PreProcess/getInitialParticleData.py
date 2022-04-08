@@ -3,6 +3,8 @@
 # ---------------Date: 04-01-2022---------------
 # ---------------License : BSD LICENSE----------
 
+import random
+
 class getInitialParticleData():
 
     def __init__(self) -> None:
@@ -24,7 +26,7 @@ class getInitialParticleData():
                     "id" : self.p_id,
                     "p_x" : self.p_x,
                     "p_y" : self.p_y,
-                    "radius" : r,
+                    "radius" : r * random.randint(1, 10) / 10,
                     "p_v_x" : 0.0,
                     "p_v_y" : 0.0
                     }

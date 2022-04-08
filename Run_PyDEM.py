@@ -20,7 +20,7 @@ class TheMainProcess():
         self.W = 10
         self.r = 0.1
 
-
+    # running functions
     def run(self):
 
         self.my2dData.creat_disk(self.L, self.W, self.r)
@@ -28,6 +28,7 @@ class TheMainProcess():
         #self.plot_results()
         self.my2dPost.WriteOutParaview(self.my2dData)
 
+    # cicle for force and information update
     def main_cicle(self):
 
         while self.i_run_time < self.aim_run_time:
