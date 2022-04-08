@@ -1,7 +1,7 @@
 # ---------------Name: PyDEM -------------------
 # ----------Author: Chengshun Shang-------------
 # ---------------Date: 04-01-2022---------------
-# ---------------License : ---------------------
+# ---------------License : BSD LICENSE----------
 
 class getInitialParticleData():
 
