@@ -26,7 +26,8 @@ class getInitialParticleData():
                     "id" : self.p_id,
                     "p_x" : self.p_x,
                     "p_y" : self.p_y,
-                    "radius" : r * random.randint(1, 10) / 10,
+                    # "radius" : self.r * random.randint(1, 10) / 10,
+                    "radius" : self.r,
                     "p_v_x" : 0.0,
                     "p_v_y" : 0.0
                     }
