@@ -1,3 +1,8 @@
+# ---------------Name: StarDEM -------------------
+# ------------Author: Chengshun Shang-------------
+# -----------------Date: 04-01-2022---------------
+# ---------------License : BSD license------------
+
 from build.Release import example
 
 print(example.add1())

@@ -1,3 +1,8 @@
+// ---------------Name: StarDEM -------------------
+// ------------Author: Chengshun Shang-------------
+// -----------------Date: 04-01-2022---------------
+// ---------------License : BSD license------------
+
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;

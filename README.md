@@ -1,19 +1,20 @@
-# PyDEM
+# StarDEM
 
-An open sourced Discrete Element Method (DEM) software based on Python. 
+An open sourced Discrete Element Method (DEM) software based on Python and C++. 
 
-This is a very simple DEM code for beginners who are interested in DEM coding. 
-
-Due to the low efficiency of Python, it is hard to apply this software to large scale problems which usually involves tons of particles.
+A very simple DEM code for beginners who are interested in DEM coding. 
 
 ## Environment requird
+
 Python 3.x
+
+cmake
 
 Post Process : Paraview
 
 ## A simple tutorial
 
-Run the "Run_PyDEM.py" file
+Run the "Run_StarDEM.py" file
 
 You will get a results in ResultsOutput file
 
@@ -31,5 +32,8 @@ Use Paraview to check the results as the following steps.
     + Change Glyph Mode to All Points.
     + Apply.
 
+## Special Thanks To
+
+* pybind11 for exposing C++ to python
 ## Contract
 Email: cshang.cimne.upc.edu

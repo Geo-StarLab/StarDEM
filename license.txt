@@ -1,4 +1,4 @@
-PyDEM - Python based Discrete Element Method software
+StarDEM - Python and C++ based Discrete Element Method software
 
 Copyright (c) 2022, Chengshun Shang
 All rights reserved.
