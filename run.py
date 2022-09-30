@@ -3,18 +3,10 @@
 # -----------------Date: 04-01-2022---------------
 # ---------------License : BSD license------------
 
-from build.Release import example
+from build.Release import StarDEM
 
-print(example.add1())
-print(example.add2(i=23, j=2))
-print(example.the_answer)
-print(example.what)
-print(example.warning)
-# print(help(example))
-
-p = example.Pet("Dabai")
-print(p)
-print(p.name)
-print(p.getName())
-p.setName("Xiaohui")
-print(p.getName())
+#StarDEM.MyName()
+#print(help(StarDEM))
+test = StarDEM.FirstTest()
+#print(dir(StarDEM))
+print(test.MyName())

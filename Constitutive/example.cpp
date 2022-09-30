@@ -64,7 +64,7 @@ struct Widget{
     int foo(int x, float y) const;
 };
 
-PYBIND11_MODULE(example, m){
+PYBIND11_MODULE(StarDEM, m){
     m.doc() = "pybind11 example plugin";
     //regular notation
     m.def("add1", &add, "A function that add two numbers", py::arg("i") = 1, py::arg("j") = 2);
