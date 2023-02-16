@@ -10,30 +10,41 @@ class TheMainProcess():
 
     def __init__(self) -> None:
         
-        self.my2dData = getInitialParticleData()
-        self.my2dPost = PostProcess()
+        self.myDEMData = getInitialParticleData()
+        self.myDEMPost = PostProcess()
 
         self.i_run_time = 0.0
         self.aim_run_time = 1.0
         self.time_step = 1e-5
-        self.L = 5
-        self.W = 10
-        self.r = 0.1
+        self.L = 220
+        self.W = 20
+        self.T = 20
+        self.r = 10
+        self.is_round = False   #you should be careful when you set this parameters :)
+
+        #for creating membrane layer
+        self.H = 0.05
+        self.r_in = 0.0125
+        self.r_m = 0.001
+        self.p_id_ini = 1
 
     # running functions
     def run(self):
 
-        self.my2dData.creat_disk(self.L, self.W, self.r)
+        #self.myDEMData.creat_disk(self.L, self.W, self.r, self.is_round)
+        #self.myDEMData.creat_sphere(self.L, self.W, self.T, self.r, self.is_round)
+        self.myDEMData.creat_membrane(self.H, self.r_in, self.r_m, self.p_id_ini)
         self.main_cicle()
         #self.plot_results()
-        self.my2dPost.WriteOutParaview(self.my2dData)
+        #self.myDEMPost.WriteOutParaview(self.myDEMData)
+        self.myDEMPost.WriteOutGIDData(self.myDEMData)
 
     # cicle for force and information update
     def main_cicle(self):
 
         while self.i_run_time < self.aim_run_time:
             # traverse all the 
-            for p_pram_dict in self.my2dData.p_pram_list:
+            for p_pram_dict in self.myDEMData.p_pram_list:
                 
                 #force_cal(p_pram_dict["p_x"], p_pram_dict["p_y"], p_pram_dict["radius"], p_pram_dict["p_v_x"], p_pram_dict["p_v_y"])
                 print("%s\t" % p_pram_dict)
