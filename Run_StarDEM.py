@@ -25,8 +25,8 @@ class TheMainProcess():
         #for creating membrane layer
         self.H = 0.05
         self.r_in = 0.0125
-        self.r_m = 0.001
-        self.p_id_ini = 1
+        self.r_m = 0.0015
+        self.p_id_ini = 3000
 
     # running functions
     def run(self):
@@ -36,7 +36,7 @@ class TheMainProcess():
         self.myDEMData.creat_membrane(self.H, self.r_in, self.r_m, self.p_id_ini)
         self.main_cicle()
         #self.plot_results()
-        #self.myDEMPost.WriteOutParaview(self.myDEMData)
+        self.myDEMPost.WriteOutParaview(self.myDEMData)
         self.myDEMPost.WriteOutGIDData(self.myDEMData)
 
     # cicle for force and information update

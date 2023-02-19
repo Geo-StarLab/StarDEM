@@ -6,6 +6,7 @@
 import random
 import math
 import numpy as np
+import matplotlib.pyplot as plt
 
 class getInitialParticleData():
 
@@ -97,24 +98,22 @@ class getInitialParticleData():
         self.H = H
         self.r_in = r_in
         self.r_m = r_m
-        self.x0 = 0.0
-        self.z0 = 0.0
+        self.m_x_0 = 0.0
+        self.m_z_0 = 0.0
 
         self.temp_circle_num = (2 * math.pi * (self.r_in + self.r_m)) // (2 * self.r_m)
         if (2 * self.r_m * self.temp_circle_num) < (2 * math.pi * (self.r_in + self.r_m)):
             self.r_m = (2 * math.pi * (self.r_in + self.r_m)) / (2 * (self.temp_circle_num + 1))
-        
-        self.x0 += (self.r_in + self.r_m)
 
         while self.i_layer <= ((self.H - 2 * self.r_m) / ( 1.732 * self.r_m) + 1):
 
             #in this case, y is the verticle direction
             self.p_y = self.r_m + (self.i_layer - 1) * ( 1.732 * self.r_m)
 
-            for angle in np.arange(0, 180, (self.temp_circle_num + 1)):
-
-                self.p_x = self.x0 + (self.r_in + self.r_m) * math.cos((angle + (self.i_layer - 1) * (180 / (self.temp_circle_num + 1))) * math.pi / 180)
-                self.p_z = self.z0 + (self.r_in + self.r_m) * math.sin((angle + (self.i_layer - 1) * (180 / (self.temp_circle_num + 1))) * math.pi / 180)
+            for angle in np.arange(0, 360, (360 / (self.temp_circle_num + 1))):
+                
+                self.p_x = self.m_x_0 + (self.r_in + self.r_m) * math.cos((angle + (self.i_layer - 1) * (180 / (self.temp_circle_num + 1))) * math.pi / 180)
+                self.p_z = self.m_z_0 + (self.r_in + self.r_m) * math.sin((angle + (self.i_layer - 1) * (180 / (self.temp_circle_num + 1))) * math.pi / 180)
 
                 self.p_pram_dict = {
                     "id" : self.p_id,
@@ -130,5 +129,6 @@ class getInitialParticleData():
 
                 self.p_pram_list.append(self.p_pram_dict)
                 self.p_id = self.p_id + 1
+
             self.i_layer += 1
         print("Creat spheres finished!\t")
