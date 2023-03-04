@@ -28,12 +28,24 @@ class TheMainProcess():
         self.r_m = 0.0015
         self.p_id_ini = 3000
 
+        #for reading mdpa file
+        self.aim_mdpa_file_name = 'G-TriaxialDEM.mdpa'
+
+        #for set particle group ID
+        self.sample_height = 0.05
+        self.sample_width  = 0.025
+        self.joint_angle   = 30
+        self.joint_width_1 = 0.002
+        self.joint_width_2 = 0.003
+
     # running functions
     def run(self):
 
         #self.myDEMData.creat_disk(self.L, self.W, self.r, self.is_round)
         #self.myDEMData.creat_sphere(self.L, self.W, self.T, self.r, self.is_round)
-        self.myDEMData.creat_membrane(self.H, self.r_in, self.r_m, self.p_id_ini)
+        #self.myDEMData.creat_membrane(self.H, self.r_in, self.r_m, self.p_id_ini)
+        self.myDEMData.getParticleDataFromMdpa(self.aim_mdpa_file_name)
+        self.myDEMData.setParticleGroupID(self.sample_height, self.sample_width, self.joint_angle, self.joint_width_1, self.joint_width_2, self.myDEMData.p_pram_list)
         self.main_cicle()
         #self.plot_results()
         self.myDEMPost.WriteOutParaview(self.myDEMData)

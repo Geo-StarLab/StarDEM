@@ -7,6 +7,7 @@ import random
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 class getInitialParticleData():
 
@@ -132,3 +133,119 @@ class getInitialParticleData():
 
             self.i_layer += 1
         print("Creat spheres finished!\t")
+
+    def getParticleDataFromMdpa(self, aim_mdpa_file_name):
+        
+        self.p_id = 1
+        self.p_record_nodes = False
+        self.p_record_elements = False
+        self.p_record_radius = False
+
+        if os.path.isfile(aim_mdpa_file_name):
+            
+            with open(aim_mdpa_file_name, 'r') as mdpa_data:
+
+                for line in mdpa_data:
+
+                    self.p_pram_dict = {
+                    "id" : 0,
+                    "p_x" : 0.0,
+                    "p_y" : 0.0,
+                    "p_z" : 0.0,
+                    "radius" : 0.0,
+                    "p_v_x" : 0.0,
+                    "p_v_y" : 0.0,
+                    "p_v_z" : 0.0,
+                    "p_ele_id": 0,
+                    "p_group_id": 0
+                    }
+                            
+                    values = [str(s) for s in line.split()]
+
+                    if len(values) > 1:
+                        if values[0] == 'Begin' and values[1] == 'Nodes':
+                            self.p_record_nodes = True
+                            continue
+                        elif values[0] == 'End' and values[1] == 'Nodes':
+                            self.p_record_nodes = False
+
+                        if values[0] == 'Begin' and values[1] == 'Elements':
+                            self.p_record_elements = True
+                            continue
+                        elif values[0] == 'End' and values[1] == 'Elements':
+                            self.p_record_elements = False
+
+                    if len(values) > 2:
+                        if values[0] == 'Begin' and values[2] == 'RADIUS':
+                            self.p_record_radius = True
+                            continue
+                    if len(values) > 1:
+                        if values[0] == 'End' and values[1] == 'NodalData' and self.p_record_radius == True:
+                            self.p_record_radius = False
+
+                    if self.p_record_nodes:
+                        self.p_pram_dict["id"] = int(values[0])
+                        self.p_pram_dict["p_x"] = float(values[1])
+                        self.p_pram_dict["p_y"] = float(values[2])
+                        self.p_pram_dict["p_z"] = float(values[3])
+
+                    if self.p_record_elements:
+                        #only modify the values, not add new one
+                        temp_p_pram_dict = next(old_p_pram_dict for old_p_pram_dict in self.p_pram_list if old_p_pram_dict['id'] == int(values[2]))
+                        temp_p_pram_dict["p_ele_id"] = int(values[0])
+
+                    if self.p_record_radius:
+                        #only modify the values, not add new one
+                        temp_p_pram_dict = next(old_p_pram_dict for old_p_pram_dict in self.p_pram_list if old_p_pram_dict['id'] == int(values[0]))
+                        temp_p_pram_dict["radius"] = float(values[2])
+
+                    if not (self.p_record_elements and self.p_record_radius):
+                        if self.p_record_nodes:
+                            self.p_pram_list.append(self.p_pram_dict)
+                            self.p_id = self.p_id + 1
+
+        self.p_pram_list = sorted(self.p_pram_list, key=lambda d: d['id'])
+
+        print("Read mdpa file finished!\t")
+
+    def setParticleGroupID(self, sample_height, sample_width, joint_angle, joint_width_1, joint_width_2, p_pram_list):
+        
+        # usually, we set the sample base at 0,0,0
+
+        joint_k = math.tan(joint_angle * math.pi / 180)
+
+        if joint_angle != 90:
+
+            intercept_add_joint_1 =  joint_width_1 / math.cos(joint_angle * math.pi / 180)
+
+            for p_pram_dict in p_pram_list:
+
+                intercept_b = -0.5 * sample_height
+            
+                while intercept_b < (1.5 * sample_height):
+                    
+                    if p_pram_dict["p_y"] > (p_pram_dict["p_x"] * joint_k + intercept_b) \
+                        and p_pram_dict["p_y"] < (p_pram_dict["p_x"] * joint_k + intercept_b + intercept_add_joint_1):
+                        
+                        p_pram_dict["p_group_id"] = 1
+                        break
+
+                    intercept_b += (joint_width_1 + joint_width_2) / math.cos(joint_angle * math.pi / 180)
+
+        else:
+
+            step_x = -1.0 * sample_width
+            step_x_add_joint_1 = joint_width_1
+
+            for p_pram_dict in p_pram_list:
+            
+                while step_x < sample_width:
+                    
+                    if p_pram_dict["p_x"] > step_x and p_pram_dict["p_x"] < (step_x + step_x_add_joint_1):
+                        
+                        p_pram_dict["p_group_id"] = 1
+                        break
+
+                    step_x += (joint_width_1 + joint_width_2)
+
+        print("Set group ID finished!\t")

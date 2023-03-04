@@ -63,37 +63,59 @@ class PostProcess():
         
         with open(self.outName,'a') as f:
             # write the particle information
-            #f.write("Begin ModelPartData \n //  VARIABLE_NAME value \n End ModelPartData \n \n Begin Properties 0 \n End Properties \n \n Begin Nodes\n")
-            #f.write("Begin Nodes\n")
+            f.write("Begin ModelPartData \n //  VARIABLE_NAME value \n End ModelPartData \n \n Begin Properties 0 \n End Properties \n \n")
+            f.write("Begin Nodes\n")
             for p_pram_dict in self.myDEMData.p_pram_list:
                 f.write(str(p_pram_dict["id"]) + ' ' + str(p_pram_dict["p_x"]) + ' ' + str(p_pram_dict["p_y"]) + ' ' + str(p_pram_dict["p_z"]) + '\n')
-            #f.write("End Nodes \n \n")
+            f.write("End Nodes \n \n")
 
-            f.write("Begin Elements SphericContinuumParticle3D// GUI group identifier: Membrane \n")
+            f.write("Begin Elements SphericContinuumParticle3D// GUI group identifier: Body \n")
             for p_pram_dict in self.myDEMData.p_pram_list:
-                f.write(str(p_pram_dict["id"] - 647) + ' ' + ' 0 ' + str(p_pram_dict["id"]) + '\n')
+                f.write(str(p_pram_dict["p_ele_id"]) + ' ' + ' 0 ' + str(p_pram_dict["id"]) + '\n')
             f.write("End Elements \n \n")
 
-            f.write("Begin NodalData RADIUS // GUI group identifier: Membrane \n")
+            f.write("Begin NodalData RADIUS // GUI group identifier: Body \n")
             for p_pram_dict in self.myDEMData.p_pram_list:
                 f.write(str(p_pram_dict["id"]) + ' ' + ' 0 ' + str(p_pram_dict["radius"]) + '\n')
             f.write("End NodalData \n \n")
 
-            f.write("Begin NodalData COHESIVE_GROUP // GUI group identifier: Membrane \n")
+            f.write("Begin NodalData COHESIVE_GROUP // GUI group identifier: Body \n")
             for p_pram_dict in self.myDEMData.p_pram_list:
-                f.write(str(p_pram_dict["id"]) + ' ' + ' 0 ' + " 2 " + '\n')
+                f.write(str(p_pram_dict["id"]) + ' ' + ' 0 ' + " 1 " + '\n')
             f.write("End NodalData \n \n")
 
-            #f.write("Begin NodalData SKIN_SPHERE \n End NodalData \n \n")
+            f.write("Begin NodalData SKIN_SPHERE \n End NodalData \n \n")
 
-            f.write("Begin SubModelPart DEMParts_Membrane // Group Membrane // Subtree DEMParts \n Begin SubModelPartNodes \n")
+            f.write("Begin SubModelPart DEMParts_Body // Group Body // Subtree DEMParts \n Begin SubModelPartNodes \n")
             for p_pram_dict in self.myDEMData.p_pram_list:
-                f.write(str(p_pram_dict["id"]) + '\n')
+                if p_pram_dict["p_group_id"] == 0:
+                    f.write(str(p_pram_dict["id"]) + '\n')
             f.write("End SubModelPartNodes \n Begin SubModelPartElements \n ")
+            self.myDEMData.p_pram_list = sorted(self.myDEMData.p_pram_list, key=lambda d: d['p_ele_id'])
             for p_pram_dict in self.myDEMData.p_pram_list:
-                f.write(str(p_pram_dict["id"] - 647) + '\n')
+                if p_pram_dict["p_group_id"] == 0:
+                    f.write(str(p_pram_dict["p_ele_id"]) + '\n')
             f.write("End SubModelPartElements \n")
-            f.write("Begin SubModelPartConditions \n End SubModelPartConditions \n End SubModelPart \n")
+            f.write("Begin SubModelPartConditions \n End SubModelPartConditions \n End SubModelPart \n \n")
+
+            #write out joint group
+            for p_pram_dict in self.myDEMData.p_pram_list:
+                if p_pram_dict["p_group_id"] == 1:
+                    joint_exist = True
+
+            if joint_exist:
+                f.write("Begin SubModelPart DEMParts_Joint // Group Joint // Subtree DEMParts \n Begin SubModelPartNodes \n")
+                self.myDEMData.p_pram_list = sorted(self.myDEMData.p_pram_list, key=lambda d: d['id'])
+                for p_pram_dict in self.myDEMData.p_pram_list:
+                    if p_pram_dict["p_group_id"] == 1:
+                        f.write(str(p_pram_dict["id"]) + '\n')
+                f.write("End SubModelPartNodes \n Begin SubModelPartElements \n ")
+                self.myDEMData.p_pram_list = sorted(self.myDEMData.p_pram_list, key=lambda d: d['p_ele_id'])
+                for p_pram_dict in self.myDEMData.p_pram_list:
+                    if p_pram_dict["p_group_id"] == 1:
+                        f.write(str(p_pram_dict["p_ele_id"]) + '\n')
+                f.write("End SubModelPartElements \n")
+                f.write("Begin SubModelPartConditions \n End SubModelPartConditions \n End SubModelPart \n")
 
             f.close()
 
