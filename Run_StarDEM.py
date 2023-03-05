@@ -34,9 +34,9 @@ class TheMainProcess():
         #for set particle group ID
         self.sample_height = 0.05
         self.sample_width  = 0.025
-        self.joint_angle   = 30
-        self.joint_width_1 = 0.002
-        self.joint_width_2 = 0.003
+        self.joint_angle   = 90
+        self.joint_width_1 = 0.005
+        self.joint_width_2 = 0.005
 
     # running functions
     def run(self):

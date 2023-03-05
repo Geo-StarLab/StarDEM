@@ -212,10 +212,9 @@ class getInitialParticleData():
         
         # usually, we set the sample base at 0,0,0
 
-        joint_k = math.tan(joint_angle * math.pi / 180)
-
         if joint_angle != 90:
 
+            joint_k = math.tan(joint_angle * math.pi / 180)
             intercept_add_joint_1 =  joint_width_1 / math.cos(joint_angle * math.pi / 180)
 
             for p_pram_dict in p_pram_list:
@@ -234,10 +233,11 @@ class getInitialParticleData():
 
         else:
 
-            step_x = -1.0 * sample_width
             step_x_add_joint_1 = joint_width_1
 
             for p_pram_dict in p_pram_list:
+
+                step_x = -1.0 * sample_width
             
                 while step_x < sample_width:
                     

@@ -91,7 +91,6 @@ class PostProcess():
                 if p_pram_dict["p_group_id"] == 0:
                     f.write(str(p_pram_dict["id"]) + '\n')
             f.write("End SubModelPartNodes \n Begin SubModelPartElements \n ")
-            self.myDEMData.p_pram_list = sorted(self.myDEMData.p_pram_list, key=lambda d: d['p_ele_id'])
             for p_pram_dict in self.myDEMData.p_pram_list:
                 if p_pram_dict["p_group_id"] == 0:
                     f.write(str(p_pram_dict["p_ele_id"]) + '\n')
@@ -105,12 +104,10 @@ class PostProcess():
 
             if joint_exist:
                 f.write("Begin SubModelPart DEMParts_Joint // Group Joint // Subtree DEMParts \n Begin SubModelPartNodes \n")
-                self.myDEMData.p_pram_list = sorted(self.myDEMData.p_pram_list, key=lambda d: d['id'])
                 for p_pram_dict in self.myDEMData.p_pram_list:
                     if p_pram_dict["p_group_id"] == 1:
                         f.write(str(p_pram_dict["id"]) + '\n')
                 f.write("End SubModelPartNodes \n Begin SubModelPartElements \n ")
-                self.myDEMData.p_pram_list = sorted(self.myDEMData.p_pram_list, key=lambda d: d['p_ele_id'])
                 for p_pram_dict in self.myDEMData.p_pram_list:
                     if p_pram_dict["p_group_id"] == 1:
                         f.write(str(p_pram_dict["p_ele_id"]) + '\n')
