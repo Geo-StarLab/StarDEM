@@ -32,11 +32,11 @@ class TheMainProcess():
         self.aim_mdpa_file_name = 'G-TriaxialDEM.mdpa'
 
         #for set particle group ID
-        self.sample_height = 0.05
-        self.sample_width  = 0.025
-        self.joint_angle   = 90
-        self.joint_width_1 = 0.005
-        self.joint_width_2 = 0.005
+        self.sample_height = 0.108
+        self.sample_width  = 0.054
+        self.joint_angle   = 45
+        self.joint_width_1 = 0.006  # this is the joint width
+        self.joint_width_2 = 0.010  # this is the main rock width
 
     # running functions
     def run(self):
