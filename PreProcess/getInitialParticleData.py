@@ -249,3 +249,35 @@ class getInitialParticleData():
                     step_x += (joint_width_1 + joint_width_2)
 
         print("Set group ID finished!\t")
+
+    def setParticleGroupIDSingle(self, sample_height, joint_angle, joint_width_1, p_pram_list):
+        
+        # usually, we set the sample base at 0,0,0
+
+        if joint_angle != 90:
+
+            joint_k = math.tan(joint_angle * math.pi / 180)
+            intercept_add_joint_1 =  joint_width_1 / math.cos(joint_angle * math.pi / 180)
+
+            for p_pram_dict in p_pram_list:
+
+                intercept_b = 0.5 * sample_height - 0.5 * intercept_add_joint_1
+                    
+                if p_pram_dict["p_y"] > (p_pram_dict["p_x"] * joint_k + intercept_b) \
+                    and p_pram_dict["p_y"] < (p_pram_dict["p_x"] * joint_k + intercept_b + intercept_add_joint_1):
+                    
+                    p_pram_dict["p_group_id"] = 1
+
+        else:
+
+            step_x_add_joint_1 = joint_width_1
+
+            for p_pram_dict in p_pram_list:
+
+                step_x = -0.5 * joint_width_1
+                    
+                if p_pram_dict["p_x"] > step_x and p_pram_dict["p_x"] < (step_x + step_x_add_joint_1):
+                    
+                    p_pram_dict["p_group_id"] = 1
+
+        print("Set group ID finished!\t")

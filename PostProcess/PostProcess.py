@@ -55,7 +55,7 @@ class PostProcess():
         
         self.myDEMData = myDEMData
 
-        self.outName = './ResultsOutput/G-TriaxialDEM.mdpa'
+        self.outName = './ResultsOutput/G-TriaxialDEM_out.mdpa'
 
         # clean the exsisted file first
         if os.path.isfile(self.outName):
