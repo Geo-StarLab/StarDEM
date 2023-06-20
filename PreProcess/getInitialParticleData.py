@@ -281,3 +281,43 @@ class getInitialParticleData():
                     p_pram_dict["p_group_id"] = 1
 
         print("Set group ID finished!\t")
+
+    def vector_plane_intersection(self, point1, point2, plane_normal, plane_point):
+        # 计算向量
+        vector = np.array(point2) - np.array(point1)
+
+        # 计算向量和平面法线的点积
+        dot_product = np.dot(vector, plane_normal)
+
+        # 计算向量和平面点到点1的向量的点积
+        point_vector = np.array(point1) - np.array(plane_point)
+        point_dot_product = np.dot(point_vector, plane_normal)
+
+        # 判断向量和平面是否相交
+        if dot_product != 0:
+            t = -point_dot_product / dot_product
+            if t >= 0 and t <= 1:
+                return True
+
+        return False
+    
+    def setParticleGroupIDSingleSlim(self, joint_angle, joint_point, p_pram_list):
+        
+        # usually, we set the sample base at 0,0,0
+
+        joint_normal_x = -1.0 * math.sin(joint_angle * math.pi / 180)
+        joint_normal_y = math.cos(joint_angle * math.pi / 180)
+        joint_normal_z = 0.0
+        joint_normal = np.array([joint_normal_x, joint_normal_y, joint_normal_z])
+
+        for p_pram_dict_my in p_pram_list:
+            point1 = np.array([p_pram_dict_my["p_x"], p_pram_dict_my["p_y"], p_pram_dict_my["p_z"]])
+            for p_pram_dict_other in p_pram_list:
+                point2 = np.array([p_pram_dict_other["p_x"], p_pram_dict_other["p_y"], p_pram_dict_other["p_z"]])
+                distance = np.linalg.norm(np.array(point2) - np.array(point1))
+                if distance < 1.2 * (p_pram_dict_my["radius"] + p_pram_dict_other["radius"]):
+                    if self.vector_plane_intersection(point1, point2, joint_normal, joint_point):
+                        p_pram_dict_my["p_group_id"] = 1
+                        p_pram_dict_other["p_group_id"] = 1
+
+        print("Set group ID finished!\t")

@@ -37,6 +37,7 @@ class TheMainProcess():
         self.joint_angle   = 45
         self.joint_width_1 = 0.006  # this is the joint width
         self.joint_width_2 = 0.010  # this is the main rock width
+        self.joint_point = [0.0, 0.054, 0.0]
 
     # running functions
     def run(self):
@@ -46,7 +47,8 @@ class TheMainProcess():
         #self.myDEMData.creat_membrane(self.H, self.r_in, self.r_m, self.p_id_ini)
         self.myDEMData.getParticleDataFromMdpa(self.aim_mdpa_file_name)
         #self.myDEMData.setParticleGroupID(self.sample_height, self.sample_width, self.joint_angle, self.joint_width_1, self.joint_width_2, self.myDEMData.p_pram_list)
-        self.myDEMData.setParticleGroupIDSingle(self.sample_height, self.joint_angle, self.joint_width_1, self.myDEMData.p_pram_list)
+        #self.myDEMData.setParticleGroupIDSingle(self.sample_height, self.joint_angle, self.joint_width_1, self.myDEMData.p_pram_list)
+        self.myDEMData.setParticleGroupIDSingleSlim(self.joint_angle, self.joint_point, self.myDEMData.p_pram_list)
         self.main_cicle()
         #self.plot_results()
         self.myDEMPost.WriteOutParaview(self.myDEMData)
