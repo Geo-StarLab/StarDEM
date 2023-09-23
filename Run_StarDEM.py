@@ -16,11 +16,12 @@ class TheMainProcess():
         self.i_run_time = 0.0
         self.aim_run_time = 1.0
         self.time_step = 1e-5
-        self.L = 220
+        self.L = 100
         self.W = 20
         self.T = 20
         self.r = 10
-        self.is_round = False   #you should be careful when you set this parameters :)
+        self.initial_particle_number = 10
+        self.is_round = True   #you should be careful when you set this parameters :)
 
         #for creating membrane layer
         self.H = 0.05
@@ -29,30 +30,37 @@ class TheMainProcess():
         self.p_id_ini = 3000
 
         #for reading mdpa file
-        self.aim_mdpa_file_name = 'G-TriaxialDEM.mdpa'
+        self.aim_mdpa_file_name = 'inletPGDEM.mdpa'
 
         #for set particle group ID
         self.sample_height = 0.108
         self.sample_width  = 0.054
-        self.joint_angle   = 45
+        self.joint_angle   = 83.0
         self.joint_width_1 = 0.006  # this is the joint width
         self.joint_width_2 = 0.010  # this is the main rock width
         self.joint_point = [0.0, 0.054, 0.0]
+
+        #for divide sample into 3 parts
+        self.width_1 = 0.004
+        self.width_2 = 0.04
 
     # running functions
     def run(self):
 
         #self.myDEMData.creat_disk(self.L, self.W, self.r, self.is_round)
         #self.myDEMData.creat_sphere(self.L, self.W, self.T, self.r, self.is_round)
+        self.myDEMData.creat_sphere_adaptive(self.L, self.W, self.T, self.initial_particle_number, self.is_round)
         #self.myDEMData.creat_membrane(self.H, self.r_in, self.r_m, self.p_id_ini)
-        self.myDEMData.getParticleDataFromMdpa(self.aim_mdpa_file_name)
+        #self.myDEMData.getParticleDataFromMdpa(self.aim_mdpa_file_name)
         #self.myDEMData.setParticleGroupID(self.sample_height, self.sample_width, self.joint_angle, self.joint_width_1, self.joint_width_2, self.myDEMData.p_pram_list)
         #self.myDEMData.setParticleGroupIDSingle(self.sample_height, self.joint_angle, self.joint_width_1, self.myDEMData.p_pram_list)
-        self.myDEMData.setParticleGroupIDSingleSlim(self.joint_angle, self.joint_point, self.myDEMData.p_pram_list)
+        #self.myDEMData.setParticleGroupIDSingleSlim(self.joint_angle, self.joint_point, self.myDEMData.p_pram_list)
+        #self.myDEMData.setParticleGroupIDSimple(self.width_1, self.width_2, self.myDEMData.p_pram_list)
         self.main_cicle()
         #self.plot_results()
         self.myDEMPost.WriteOutParaview(self.myDEMData)
-        self.myDEMPost.WriteOutGIDData(self.myDEMData)
+        #self.myDEMPost.WriteOutGIDData(self.myDEMData)
+        #self.myDEMPost.WriteOutGIDDataNonCohesive(self.myDEMData)
 
     # cicle for force and information update
     def main_cicle(self):

@@ -92,6 +92,48 @@ class getInitialParticleData():
             self.i_col = 1
         print("Creat spheres finished!\t")
 
+    def creat_sphere_adaptive(self, L, W, T, initial_particle_number, is_round):
+        self.p_id = 1
+        self.length_in_L = 0.0
+        self.length_in_W = 0.0
+        self.length_in_T = 0.0
+        self.L = L
+        self.W = W
+        self.T = T
+        self.is_round = is_round
+        while self.length_in_L < self.L * 1.01:
+            self.r = self.W / (initial_particle_number * 2)
+            while self.length_in_W < self.W * 1.01:
+                while self.length_in_T < self.T * 1.01:
+                    if self.is_round:
+                        self.p_x = round((self.length_in_L + self.r), 2)
+                        self.p_y = round((self.length_in_W + self.r), 2)
+                        self.p_z = round((self.length_in_T + self.r), 2)
+                    else:
+                        self.p_x = self.length_in_L + self.r
+                        self.p_y = self.length_in_W + self.r
+                        self.p_z = self.length_in_T + self.r
+                    self.p_pram_dict = {
+                        "id" : self.p_id,
+                        "p_x" : self.p_x,
+                        "p_y" : self.p_y,
+                        "p_z" : self.p_z,
+                        # "radius" : self.r * random.randint(1, 10) / 10,
+                        "radius" : self.r,
+                        "p_v_x" : 0.0,
+                        "p_v_y" : 0.0,
+                        "p_v_z" : 0.0
+                        }
+                    self.p_pram_list.append(self.p_pram_dict)
+                    self.p_id = self.p_id + 1
+                    self.length_in_T += 2*self.r
+                self.length_in_W += 2*self.r
+                self.length_in_T = 0.0
+            if self.length_in_L > 90:
+                initial_particle_number += 5
+            self.length_in_L += 2*self.r
+            self.length_in_W = 0.0
+        print("Creat spheres finished!\t")
 
     def creat_membrane(self, H, r_in, r_m, p_id_ini):
         self.p_id = p_id_ini
@@ -282,18 +324,35 @@ class getInitialParticleData():
 
         print("Set group ID finished!\t")
 
+    def setParticleGroupIDSimple(self, width_1, width_2, p_pram_list):
+        
+        # usually, we set the sample base at 0,0,0
+        # divide the sample into 3 parts
+
+        for p_pram_dict in p_pram_list:
+        
+            if p_pram_dict["p_y"] < width_1:
+                
+                p_pram_dict["p_group_id"] = 1
+
+            elif p_pram_dict["p_y"] > width_1 + width_2:
+                
+                p_pram_dict["p_group_id"] = 2
+
+        print("Set group ID finished!\t")
+
     def vector_plane_intersection(self, point1, point2, plane_normal, plane_point):
-        # ¼ÆËãÏòÁ¿
+        # ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         vector = np.array(point2) - np.array(point1)
 
-        # ¼ÆËãÏòÁ¿ºÍÆ½Ãæ·¨ÏßµÄµã»ý
+        # ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ½ï¿½æ·¨ï¿½ßµÄµï¿½ï¿½
         dot_product = np.dot(vector, plane_normal)
 
-        # ¼ÆËãÏòÁ¿ºÍÆ½Ãæµãµ½µã1µÄÏòÁ¿µÄµã»ý
+        # ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ½ï¿½ï¿½ãµ½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½
         point_vector = np.array(point1) - np.array(plane_point)
         point_dot_product = np.dot(point_vector, plane_normal)
 
-        # ÅÐ¶ÏÏòÁ¿ºÍÆ½ÃæÊÇ·ñÏà½»
+        # ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½à½»
         if dot_product != 0:
             t = -point_dot_product / dot_product
             if t >= 0 and t <= 1:

@@ -117,3 +117,76 @@ class PostProcess():
             f.close()
 
         print("Successfully write out GID DEM.mdpa file!")
+
+    def WriteOutGIDDataNonCohesive(self, myDEMData):
+        
+        self.myDEMData = myDEMData
+
+        self.outName = './ResultsOutput/G-TriaxialDEM_out.mdpa'
+
+        # clean the exsisted file first
+        if os.path.isfile(self.outName):
+            os.remove(self.outName)
+        
+        with open(self.outName,'a') as f:
+            # write the particle information
+            f.write("Begin ModelPartData \n //  VARIABLE_NAME value \n End ModelPartData \n \n Begin Properties 0 \n End Properties \n \n")
+            f.write("Begin Nodes\n")
+            for p_pram_dict in self.myDEMData.p_pram_list:
+                f.write(str(p_pram_dict["id"]) + ' ' + str(p_pram_dict["p_x"]) + ' ' + str(p_pram_dict["p_y"]) + ' ' + str(p_pram_dict["p_z"]) + '\n')
+            f.write("End Nodes \n \n")
+
+            f.write("Begin Elements SphericParticle3D// GUI group identifier: Body \n")
+            for p_pram_dict in self.myDEMData.p_pram_list:
+                f.write(str(p_pram_dict["p_ele_id"]) + ' ' + ' 0 ' + str(p_pram_dict["id"]) + '\n')
+            f.write("End Elements \n \n")
+
+            f.write("Begin NodalData RADIUS // GUI group identifier: Body \n")
+            for p_pram_dict in self.myDEMData.p_pram_list:
+                f.write(str(p_pram_dict["id"]) + ' ' + ' 0 ' + str(p_pram_dict["radius"]) + '\n')
+            f.write("End NodalData \n \n")
+
+            f.write("Begin SubModelPart DEMParts_Body // Group Body // Subtree DEMParts \n Begin SubModelPartNodes \n")
+            for p_pram_dict in self.myDEMData.p_pram_list:
+                if p_pram_dict["p_group_id"] == 0:
+                    f.write(str(p_pram_dict["id"]) + '\n')
+            f.write("End SubModelPartNodes \n Begin SubModelPartElements \n ")
+            for p_pram_dict in self.myDEMData.p_pram_list:
+                if p_pram_dict["p_group_id"] == 0:
+                    f.write(str(p_pram_dict["p_ele_id"]) + '\n')
+            f.write("End SubModelPartElements \n")
+            f.write("Begin SubModelPartConditions \n End SubModelPartConditions \n End SubModelPart \n \n")
+
+            #write out joint group
+            for p_pram_dict in self.myDEMData.p_pram_list:
+                if p_pram_dict["p_group_id"] == 1:
+                    group_exist = True
+                    break
+
+            if group_exist:
+                f.write("Begin SubModelPart DEMParts_Top // Group Top // Subtree DEMParts \n Begin SubModelPartNodes \n")
+                for p_pram_dict in self.myDEMData.p_pram_list:
+                    if p_pram_dict["p_group_id"] == 2:
+                        f.write(str(p_pram_dict["id"]) + '\n')
+                f.write("End SubModelPartNodes \n Begin SubModelPartElements \n ")
+                for p_pram_dict in self.myDEMData.p_pram_list:
+                    if p_pram_dict["p_group_id"] == 2:
+                        f.write(str(p_pram_dict["p_ele_id"]) + '\n')
+                f.write("End SubModelPartElements \n")
+                f.write("Begin SubModelPartConditions \n End SubModelPartConditions \n End SubModelPart \n \n")
+
+                f.write("Begin SubModelPart DEMParts_Bottom // Group Bottom // Subtree DEMParts \n Begin SubModelPartNodes \n")
+                for p_pram_dict in self.myDEMData.p_pram_list:
+                    if p_pram_dict["p_group_id"] == 1:
+                        f.write(str(p_pram_dict["id"]) + '\n')
+                f.write("End SubModelPartNodes \n Begin SubModelPartElements \n ")
+                for p_pram_dict in self.myDEMData.p_pram_list:
+                    if p_pram_dict["p_group_id"] == 1:
+                        f.write(str(p_pram_dict["p_ele_id"]) + '\n')
+                f.write("End SubModelPartElements \n")
+                f.write("Begin SubModelPartConditions \n End SubModelPartConditions \n End SubModelPart \n")
+
+            f.close()
+
+        print("Successfully write out GID DEM.mdpa file!")
+
