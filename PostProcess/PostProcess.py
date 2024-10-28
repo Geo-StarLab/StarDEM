@@ -55,7 +55,7 @@ class PostProcess():
         
         self.myDEMData = myDEMData
 
-        self.outName = './ResultsOutput/G-TriaxialDEM_out.mdpa'
+        self.outName = './ResultsOutput/inletPGDEM.mdpa'
 
         # clean the exsisted file first
         if os.path.isfile(self.outName):
@@ -79,12 +79,13 @@ class PostProcess():
                 f.write(str(p_pram_dict["id"]) + ' ' + ' 0 ' + str(p_pram_dict["radius"]) + '\n')
             f.write("End NodalData \n \n")
 
+            '''
             f.write("Begin NodalData COHESIVE_GROUP // GUI group identifier: Body \n")
             for p_pram_dict in self.myDEMData.p_pram_list:
                 f.write(str(p_pram_dict["id"]) + ' ' + ' 0 ' + " 1 " + '\n')
             f.write("End NodalData \n \n")
 
-            f.write("Begin NodalData SKIN_SPHERE \n End NodalData \n \n")
+            f.write("Begin NodalData SKIN_SPHERE \n End NodalData \n \n")'''
 
             f.write("Begin SubModelPart DEMParts_Body // Group Body // Subtree DEMParts \n Begin SubModelPartNodes \n")
             for p_pram_dict in self.myDEMData.p_pram_list:
@@ -98,6 +99,7 @@ class PostProcess():
             f.write("Begin SubModelPartConditions \n End SubModelPartConditions \n End SubModelPart \n \n")
 
             #write out joint group
+            joint_exist = False
             for p_pram_dict in self.myDEMData.p_pram_list:
                 if p_pram_dict["p_group_id"] == 1:
                     joint_exist = True
